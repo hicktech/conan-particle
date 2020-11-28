@@ -1,0 +1,22 @@
+#!/bin/bash -xe
+
+
+usb() {
+  local app="$1"
+  local builddir=@BUILD_DIR@
+  local dev="${PARTICLE_SERIAL_DEV:-/dev/ttyACM0}"
+
+  cd "$builddir/$app"
+  make PLATFORM=@PLATFORM@ PARTICLE_SERIAL_DEV=${dev} -f flash.mk
+}
+
+cloud() {
+  echo "not implemented"
+}
+
+# usage: flash <app> <connection>
+# export PARTICLE_SERIAL_DEV to change usb device
+
+app=$1
+shift
+"$@" "$app"
