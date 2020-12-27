@@ -19,8 +19,8 @@ make -C "$FIRMWARE_DIR/main" > /dev/null
 echo "set(PLATFORM $PLATFORM)" > "$PROJECTS_DIR/cmake/platform.cmake"
 
 echo "packaging artifacts..."
-conan export-pkg -pr "$PROJECTS_DIR/particle.profile" --force -s os.board="$PLATFORM" -s arch="$arch" "$PROJECTS_DIR/conanfile.py" hicktech/particle | tail
+conan export-pkg -pr "$PROJECTS_DIR/particle.profile" --force -s os.board="$PLATFORM" -s arch="$arch" "$PROJECTS_DIR/conanfile.py" hicktech/stable | tail
 
-du -sh "$HOME/.conan/data/$PLATFORM/$VERSION_STRING/hicktech/particle/package"
+du -sh "$HOME/.conan/data/particle/$PLATFORM.$VERSION_STRING/hicktech/stable/package"
 
 echo "done!"

@@ -3,12 +3,17 @@ device-os
 
 ### build dockerfile
 
-`docker build -t particle-conan-build --build-arg VER=1.4.2 .`
-
+`docker build -t particle-conan-build:1.4.2 --build-arg VER=1.4.2 .`
 
 ### package from docker
 
 `docker run --rm -it particle-conan-build xenon`
+
+### conan install
+
+some settings need cleaned up, for now it takes a longer config string
+
+`PLATFORM=xenon VERSION_STRING=1.4.2 conan install . -if <bin-dir> -s compiler.version=5.3 -s os=Particle -s os.board=xenon -s arch=nRF52840 -s compiler.libcxx=libstdc++11`
 
 ### optional
 
