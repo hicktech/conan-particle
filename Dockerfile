@@ -5,7 +5,6 @@ FROM particle/buildpack-particle-firmware:${VER}
 
 ENV FIRMWARE_DIR=/src
 ENV PROJECTS_DIR=/src/conan
-ENV FIRMWARE_VERSION=${VER}
 
 RUN apt update
 RUN apt install -y python3-pip libssl-dev nano

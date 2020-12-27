@@ -5,7 +5,7 @@ platform_name = os.getenv("PLATFORM")
 if not platform_name:
     raise ValueError('platform was not specified')
 
-platform_version = os.getenv("VERSION")
+platform_version = os.getenv("VERSION_STRING")
 if not platform_version:
     raise ValueError('version was not specified')
 

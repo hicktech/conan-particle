@@ -3,7 +3,7 @@ device-os
 
 ### build dockerfile
 
-`VER=1.4.2 docker build -t particle-conan-build --build-arg VERSION=$VER .`
+`docker build -t particle-conan-build --build-arg VER=1.4.2 .`
 
 
 ### package from docker
