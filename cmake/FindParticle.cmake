@@ -26,7 +26,7 @@ function(particle_app name)
         endif()
     endforeach ()
 
-    set(MODULE_PATH ${CONAN_PARTICLE_ROOT}/modules/${PLATFORM})
+    set(MODULE_PATH ${CONAN_${PLATFORM}_ROOT}/modules/${platform})
     set(USER_PART_MODULE_PATH ${MODULE_PATH}/user-part)
     set(USER_PART_MODULE_CSRC_PATH ${USER_PART_MODULE_PATH}/src/*.c)
     set(USER_PART_MODULE_CXXSRC_PATH ${USER_PART_MODULE_PATH}/src/*.cpp)
@@ -34,9 +34,9 @@ function(particle_app name)
     file(GLOB USER_PART_MODULE_CXXSRC ${USER_PART_MODULE_CXXSRC_PATH})
 
     # todo;; hack; these arent being extracted at the moment
-    include_directories(${CONAN_INCLUDE_DIRS_PARTICLE}/user/inc
-                        ${CONAN_PARTICLE_ROOT}/modules/shared/${CONAN_SETTINGS_ARCH}/inc
-                        ${CONAN_INCLUDE_DIRS_PARTICLE}/modules/shared/${CONAN_SETTINGS_ARCH}/inc/user-part)
+    include_directories(${CONAN_INCLUDE_DIRS_${PLATFORM}}/user/inc
+                        ${CONAN_${PLATFORM}_ROOT}/modules/shared/${CONAN_SETTINGS_ARCH}/inc
+                        ${CONAN_INCLUDE_DIRS_${PLATFORM}}/modules/shared/${CONAN_SETTINGS_ARCH}/inc/user-part)
 
     add_library(user-part-c STATIC ${USER_PART_MODULE_CSRC})
     target_include_directories(user-part-c PRIVATE ${USER_CXX_INCLUDES})
@@ -79,8 +79,8 @@ function(particle_app name)
     set(pre ${name}_pre)
     add_executable(${pre} user_module.c.o module_info.c.o user_export.c.o newlib_stubs.cpp.o)
     set_target_properties(${pre} PROPERTIES OUTPUT_NAME ${pre}.elf)
-    target_link_libraries(${pre} PRIVATE -Wl,--whole-archive user ${CONAN_LIBS_PARTICLE} -Wl,--no-whole-archive)
-    target_link_directories(${pre} PRIVATE ${CMAKE_BINARY_DIR} ${CONAN_LIB_DIRS_PARTICLE} ${ELF_LD_PATHS})
+    target_link_libraries(${pre} PRIVATE -Wl,--whole-archive user ${CONAN_LIBS_${PLATFORM}} -Wl,--no-whole-archive)
+    target_link_directories(${pre} PRIVATE ${CMAKE_BINARY_DIR} ${CONAN_LIB_DIRS_${PLATFORM}} ${ELF_LD_PATHS})
     target_link_options(${pre} PRIVATE ${ELF_LD_FLAGS} ${ELF_CC_FLAGS} ${ELF_CXX_FLAGS})
 
     target_include_directories(${pre} PRIVATE ${CONAN_INCLUDE_DIRS} ${ELF_CXX_INCLUDES})
@@ -88,7 +88,7 @@ function(particle_app name)
     target_compile_definitions(${pre} PRIVATE ${ELF_CXX_DEFS})
 
     add_custom_command(TARGET user PRE_BUILD
-                       COMMAND cp ${CONAN_PARTICLE_ROOT}/common/platform_user_ram.ld platform_user_ram.ld
+                       COMMAND cp ${CONAN_${PLATFORM}_ROOT}/common/platform_user_ram.ld platform_user_ram.ld
                        BYPRODUCTS platform_user_ram.ld
                        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                        COMMENT "Copy initial platform_user_ram.ld")
@@ -101,15 +101,15 @@ function(particle_app name)
     add_custom_command(TARGET ${pre} POST_BUILD
                        COMMAND GCC_ARM_PATH=/usr/local/gcc-arm/bin/ MODULE_USER_MEMORY_FILE_GEN=${CMAKE_BINARY_DIR}/platform_user_ram.ld INTERMEDIATE_ELF=$<TARGET_FILE:${pre}> make -f common/build_linker_script.mk
                        BYPRODUCTS platform_user_ram.ld
-                       WORKING_DIRECTORY ${CONAN_PARTICLE_ROOT}
+                       WORKING_DIRECTORY ${CONAN_${PLATFORM}_ROOT}
                        COMMENT "Generate final platform_user_ram.ld")
 
 
     set(final ${name})
     add_executable(${final} user_module.c.o module_info.c.o user_export.c.o newlib_stubs.cpp.o)
     set_target_properties(${final} PROPERTIES OUTPUT_NAME ${final}.elf)
-    target_link_libraries(${final} PRIVATE -Wl,--whole-archive user ${CONAN_LIBS_PARTICLE} -Wl,--no-whole-archive)
-    target_link_directories(${final} PRIVATE ${CMAKE_BINARY_DIR} ${CONAN_LIB_DIRS_PARTICLE} ${ELF_LD_PATHS})
+    target_link_libraries(${final} PRIVATE -Wl,--whole-archive user ${CONAN_LIBS_${PLATFORM}} -Wl,--no-whole-archive)
+    target_link_directories(${final} PRIVATE ${CMAKE_BINARY_DIR} ${CONAN_LIB_DIRS_${PLATFORM}} ${ELF_LD_PATHS})
     target_link_options(${final} PRIVATE ${ELF_LD_FLAGS} ${ELF_CC_FLAGS} ${ELF_CXX_FLAGS})
 
     target_include_directories(${final} PRIVATE ${CONAN_INCLUDE_DIRS} ${ELF_CXX_INCLUDES})
@@ -117,7 +117,7 @@ function(particle_app name)
     target_compile_definitions(${final} PRIVATE ${ELF_CXX_DEFS})
 
     add_custom_command(TARGET ${name} POST_BUILD
-                       COMMAND ELF=${name}.elf make -f ${CONAN_PARTICLE_ROOT}/common/bin.mk
+                       COMMAND ELF=${name}.elf make -f ${CONAN_${PLATFORM}_ROOT}/common/bin.mk
                        BYPRODUCTS ${name}.bin
                        WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 

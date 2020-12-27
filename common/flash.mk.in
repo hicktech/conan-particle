@@ -1,6 +1,6 @@
-include ${CONAN_PARTICLE_ROOT}/build/common-tools.mk
-include ${CONAN_PARTICLE_ROOT}/build/platform-id.mk
-include ${CONAN_PARTICLE_ROOT}/modules/${PLATFORM}/modular.mk
+include ${CONAN_${PLATFORM}_ROOT}/build/common-tools.mk
+include ${CONAN_${PLATFORM}_ROOT}/build/platform-id.mk
+include ${CONAN_${PLATFORM}_ROOT}/modules/${platform}/modular.mk
 
 filesize=`stat -c %s $1`
 SHA_256 = shasum -a 256
@@ -14,7 +14,7 @@ MOD_INFO_SUFFIX = $(DEFAULT_SHA_256)$(MOD_INFO_SUFFIX_LEN)
 CRC_BLOCK_CONTENTS = $(MOD_INFO_SUFFIX)78563412
 OBJCOPY = /usr/local/gcc-arm/bin/arm-none-eabi-objcopy
 
-SERIAL_SWITCHER = ${CONAN_PARTICLE_ROOT}/common/serial_switcher.py
+SERIAL_SWITCHER = ${CONAN_${PLATFORM}_ROOT}/common/serial_switcher.py
 PARTICLE_SERIAL_DEV = $(PARTICLE_SERIAL_DEV)
 START_DFU_FLASHER_SERIAL_SPEED = 14400
 PLATFORM_DFU = $(USER_FIRMWARE_IMAGE_LOCATION)

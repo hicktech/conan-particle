@@ -25,8 +25,8 @@ def fw_src(relpath):
 
 
 class ParticleFirmware(ConanFile):
-    name = "particle"
-    version = "%s.%s" % (platform_name, platform_version)
+    name = platform_name
+    version = platform_version
     license = "Apache 2.0"
     url = "https://github.com/jw3/particle-conan"
     description = "Conan packages from the Particle firmware"

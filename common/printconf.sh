@@ -2,6 +2,7 @@
 
 readonly usage="usage: $(basename $0) <platform-name>"
 readonly platform_name=$1
+readonly PLATFORM_NAME=${platform_name^^}
 readonly firmware_dir=${2:-${FIRMWARE_DIR}}
 
 format_conf() {
@@ -26,11 +27,11 @@ build_conf() {
 
   grep -e '^-L' "$flag.ld.full" | sed 's#-L##' |  sed 's#\.*\./*##g' | head -n-2 > "$flag.ld.paths.raw"
   grep -e '^-l' "$flag.ld.full" | sed 's#-l##' > "$flag.ld.libs"
-  grep -e '^-[^Ll]' "$flag.ld.full" | grep -v -e '-Map' | sed "s#^-T./#-T\${CONAN_PARTICLE_ROOT}/modules/$platform_name/user-part/#" > "$flag.ld.options"
+  grep -e '^-[^Ll]' "$flag.ld.full" | grep -v -e '-Map' | sed "s#^-T./#-T\${CONAN_${PLATFORM_NAME}_ROOT}/modules/$platform_name/user-part/#" > "$flag.ld.options"
 
   # build cmake include variable
   echo "set(${flag}_CXX_INCLUDES" > "$flag.cc.includes.cmake"
-  sed 's#^#  ${CONAN_INCLUDE_DIRS_PARTICLE}/#' "$flag.cc.includes.raw" >> "$flag.cc.includes.cmake"
+  sed "s#^#  \${CONAN_INCLUDE_DIRS_${PLATFORM_NAME}}/#" "$flag.cc.includes.raw" >> "$flag.cc.includes.cmake"
   echo ")" >> "$flag.cc.includes.cmake"
 
   # build cmake definitions variable
@@ -60,9 +61,9 @@ build_conf() {
 
   # build cmake ld paths variable
   echo "set(${flag}_LD_PATHS" > "$flag.ld.paths.cmake"
-  grep "$flag.ld.paths.raw" -ve ^build/target | xargs -I{} echo "\${CONAN_PARTICLE_ROOT}/{}" >> "$flag.ld.paths.cmake"
-  echo "\${CONAN_PARTICLE_ROOT}/modules/$platform_name/user-part" >> "$flag.ld.paths.cmake"
-  echo "\${CONAN_PARTICLE_ROOT}/lib" >> "$flag.ld.paths.cmake"
+  grep "$flag.ld.paths.raw" -ve ^build/target | xargs -I{} echo "\${CONAN_${PLATFORM_NAME}_ROOT}/{}" >> "$flag.ld.paths.cmake"
+  echo "\${CONAN_${PLATFORM_NAME}_ROOT}/modules/$platform_name/user-part" >> "$flag.ld.paths.cmake"
+  echo "\${CONAN_${PLATFORM_NAME}_ROOT}/lib" >> "$flag.ld.paths.cmake"
   echo ")" >> "$flag.ld.paths.cmake"
 }
 

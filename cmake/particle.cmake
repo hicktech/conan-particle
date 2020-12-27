@@ -10,7 +10,7 @@
 
 include(platform)
 
-message("\n=============================== Configuring firmware for the -=-= ${PLATFORM} =-=- ===============================\n")
+message("\n=============================== Configuring firmware for the -=-= ${platform} =-=- ===============================\n")
 
 # todo;; fail if CONAN_SETTINGS_ARCH is not set
 # todo;; fail if CONAN_SETTINGS_OS_BOARD is not set

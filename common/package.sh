@@ -16,11 +16,12 @@ printconf.sh "$PLATFORM"
 echo "building device-os..."
 make -C "$FIRMWARE_DIR/main" > /dev/null
 
-echo "set(PLATFORM $PLATFORM)" > "$PROJECTS_DIR/cmake/platform.cmake"
+echo "set(platform $PLATFORM)" > "$PROJECTS_DIR/cmake/platform.cmake"
+echo "set(PLATFORM ${PLATFORM^^})" >> "$PROJECTS_DIR/cmake/platform.cmake"
 
 echo "packaging artifacts..."
-conan export-pkg -pr "$PROJECTS_DIR/particle.profile" --force -s os.board="$PLATFORM" -s arch="$arch" "$PROJECTS_DIR/conanfile.py" hicktech/stable | tail
+conan export-pkg -pr "$PROJECTS_DIR/particle.profile" --force -s os.board="$PLATFORM" -s arch="$arch" "$PROJECTS_DIR/conanfile.py" hicktech/particle | tail
 
-du -sh "$HOME/.conan/data/particle/$PLATFORM.$VERSION_STRING/hicktech/stable/package"
+du -sh "$HOME/.conan/data/$PLATFORM/$VERSION_STRING/hicktech/particle/package"
 
 echo "done!"

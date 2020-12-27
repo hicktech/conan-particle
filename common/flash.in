@@ -7,7 +7,7 @@ usb() {
   local dev="${PARTICLE_SERIAL_DEV:-/dev/ttyACM0}"
 
   cd "$builddir/$app"
-  make PLATFORM=@PLATFORM@ PARTICLE_SERIAL_DEV=${dev} -f flash.mk
+  make PLATFORM=@platform@ PARTICLE_SERIAL_DEV=${dev} -f flash.mk
 }
 
 cloud() {
