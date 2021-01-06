@@ -115,6 +115,7 @@ function(particle_app name)
     target_include_directories(${final} PRIVATE ${CONAN_INCLUDE_DIRS} ${ELF_CXX_INCLUDES})
     target_compile_options(${final} PRIVATE ${ELF_CC_FLAGS} ${ELF_CXX_FLAGS})
     target_compile_definitions(${final} PRIVATE ${ELF_CXX_DEFS})
+    add_dependencies(${name} ${pre})
 
     add_custom_command(TARGET ${name} POST_BUILD
                        COMMAND ELF=${name}.elf make -f ${CONAN_${PLATFORM}_ROOT}/common/bin.mk
