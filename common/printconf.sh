@@ -41,7 +41,7 @@ build_conf() {
 
   # build cmake libs variable
   echo "set(${flag}_CXX_LIBS" > "$flag.libs.cmake"
-  sed 's#^#  #' "$flag.ld.libs" >> "$flag.libs.cmake"
+  sed 's#^#  #' "$flag.ld.libs" | grep -v nosys >> "$flag.libs.cmake"
   echo ")" >> "$flag.libs.cmake"
 
   # build cmake cc options variable
