@@ -88,7 +88,3 @@ class ParticleFirmware(ConanFile):
         self.copy("modular.mk", dst=module_path, keep_path=True, src=fw_src(module_path))
         self.copy("common-tools.mk", dst='build', keep_path=True, src=fw_src('build'))
         self.copy("platform-id.mk", dst='build', keep_path=True, src=fw_src('build'))
-
-    def package_info(self):
-        # todo;; need to order the libs...
-        self.cpp_info.libs = self.collect_libs()

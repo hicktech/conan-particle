@@ -74,12 +74,11 @@ function(particle_app name)
     target_compile_options(user PRIVATE ${USER_CC_FLAGS} ${USER_CXX_FLAGS})
     target_compile_definitions(user PRIVATE ${ELF_CXX_DEFS})
 
-    #link options here?
 
     set(pre ${name}_pre)
     add_executable(${pre} user_module.c.o module_info.c.o user_export.c.o newlib_stubs.cpp.o)
     set_target_properties(${pre} PROPERTIES OUTPUT_NAME ${pre}.elf)
-    target_link_libraries(${pre} PRIVATE -Wl,--whole-archive user ${CONAN_LIBS_${PLATFORM}} -Wl,--no-whole-archive)
+    target_link_libraries(${pre} PRIVATE -Wl,--whole-archive ${ELF_CXX_LIBS} -Wl,--no-whole-archive nosys)
     target_link_directories(${pre} PRIVATE ${CMAKE_BINARY_DIR} ${CONAN_LIB_DIRS_${PLATFORM}} ${ELF_LD_PATHS})
     target_link_options(${pre} PRIVATE ${ELF_LD_FLAGS} ${ELF_CC_FLAGS} ${ELF_CXX_FLAGS})
 
@@ -108,7 +107,7 @@ function(particle_app name)
     set(final ${name})
     add_executable(${final} user_module.c.o module_info.c.o user_export.c.o newlib_stubs.cpp.o)
     set_target_properties(${final} PROPERTIES OUTPUT_NAME ${final}.elf)
-    target_link_libraries(${final} PRIVATE -Wl,--whole-archive user ${CONAN_LIBS_${PLATFORM}} -Wl,--no-whole-archive)
+    target_link_libraries(${final} PRIVATE -Wl,--whole-archive ${ELF_CXX_LIBS} -Wl,--no-whole-archive nosys)
     target_link_directories(${final} PRIVATE ${CMAKE_BINARY_DIR} ${CONAN_LIB_DIRS_${PLATFORM}} ${ELF_LD_PATHS})
     target_link_options(${final} PRIVATE ${ELF_LD_FLAGS} ${ELF_CC_FLAGS} ${ELF_CXX_FLAGS})
 
