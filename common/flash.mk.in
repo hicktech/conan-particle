@@ -16,20 +16,20 @@ OBJCOPY = /usr/local/gcc-arm/bin/arm-none-eabi-objcopy
 
 SERIAL_SWITCHER = ${CONAN_${PLATFORM}_ROOT}/common/serial_switcher.py
 PARTICLE_SERIAL_DEV = $(PARTICLE_SERIAL_DEV)
-START_DFU_FLASHER_SERIAL_SPEED = 14400
+START_DFU_FLASHER_SERIAL_SPEED = 9600
 PLATFORM_DFU = $(USER_FIRMWARE_IMAGE_LOCATION)
 PLATFORM_DFU_LEAVE = y
 
 all: ${name}
 	cp ${name}.bin ${name}.dfu
-#	$(DFUSUFFIX) -v $(subst 0x,,$(USBD_VID_SPARK)) -p $(subst 0x,,$(USBD_PID_DFU)) -a ${name}.dfu
-#	ifeq ("$(wildcard $(PARTICLE_SERIAL_DEV))","")
-#	  @echo Serial device PARTICLE_SERIAL_DEV : $(PARTICLE_SERIAL_DEV) not available
-#	else
-#	 @echo Entering dfu bootloader mode:
-#	  $(SERIAL_SWITCHER) $(START_DFU_FLASHER_SERIAL_SPEED) $(PARTICLE_SERIAL_DEV)
-#	  sleep 1
-#	endif
+	$(DFUSUFFIX) -v $(subst 0x,,$(USBD_VID_SPARK)) -p $(subst 0x,,$(USBD_PID_DFU)) -a ${name}.dfu
+ifeq ("$(wildcard $(PARTICLE_SERIAL_DEV))","")
+	@echo Serial device PARTICLE_SERIAL_DEV : $(PARTICLE_SERIAL_DEV) not available
+else
+	@echo Entering dfu bootloader mode:
+	$(SERIAL_SWITCHER) $(START_DFU_FLASHER_SERIAL_SPEED) $(PARTICLE_SERIAL_DEV)
+	sleep 1
+endif
 	@echo Flashing ${name}.dfu:
 	$(DFU) -d $(USBD_VID_SPARK):$(USBD_PID_DFU) -a 0 -s $(PLATFORM_DFU)$(if $(PLATFORM_DFU_LEAVE),:leave) -D ${name}.dfu
 
