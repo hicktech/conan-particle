@@ -53,7 +53,7 @@ class ParticleFirmware(ConanFile):
             for p in f.readlines():
                 p = p.strip()
                 if p.startswith('build/target/user'):
-                    continue;
+                    continue
                 self.copy("*.a", dst="lib", keep_path=False, src=fw_src(p))
                 self.copy("*.ld", dst=p, keep_path=True, src=fw_src(p))
 
@@ -90,4 +90,5 @@ class ParticleFirmware(ConanFile):
         self.copy("platform-id.mk", dst='build', keep_path=True, src=fw_src('build'))
 
     def package_info(self):
+        # todo;; need to order the libs...
         self.cpp_info.libs = self.collect_libs()
