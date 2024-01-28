@@ -1,4 +1,4 @@
-device-os
+device-os from conan
 ===
 
 ### build dockerfile
@@ -33,3 +33,5 @@ arm-none-eabi-size --format=berkeley /usr/local/src/particle/firmware/user/appli
   13348	    156	   1428	  14932	   3a54	/usr/local/src/particle/firmware/user/applications/tinker/target/tinker.elf
 
 ```
+
+GPL v3
